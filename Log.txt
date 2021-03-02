@@ -1,0 +1,49 @@
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix
+from sklearn.linear_model import LogisticRegression
+
+
+data=pd.read_csv('F:/NEHA!!/7th sem/ML LAB 2/6.LOGISTIC/Student-University-logistic.csv')
+
+x=data.iloc[:,:-1]
+y=data.iloc[:,-1]
+
+X_train,X_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=100)
+
+classifier=LogisticRegression(random_state=10)
+classifier.fit(X_train,y_train)
+y_pred=classifier.predict(X_test)
+
+print("confusion matrix is given by:")
+cm=confusion_matrix( y_test, y_pred)
+print(cm)
+print("\n")
+
+FP=cm.sum(axis=0)-np.diag(cm)
+FN=cm.sum(axis=1)-np.diag(cm)
+TP=np.diag(cm)
+TN=cm.sum()-(FP+FN+TP)
+
+print("False Positive is given by:{}".format(FP))
+print("\n")
+print("False Negative is given by:{}".format(FN))
+print("\n")
+print("True Positive is given by:{}".format(TP))
+print("\n")
+print("True Negative is given by:{}".format(TN))
+print("\n")
+
+TPR=TP/(TP+FN)
+TNR=TN/(TN+FP)
+precision=TP/(TP+FP)
+recall=TP/(TP+FN)
+accuracy=(TP+TN)/(TP+TN+FP+FN)
+F1score=2*(precision*recall)/(precision+recall)
+print("TNR:{}".format(TNR))
+print("TPR:{}".format(TPR))
+print("Recall:{}".format(recall))
+print("precision:{}".format(precision))
+print("Accuracy:{}".format(accuracy))
+print("F1-Score:{}".format(F1score))
